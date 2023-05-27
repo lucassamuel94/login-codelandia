@@ -1,4 +1,5 @@
 export { Home } from './Home'
 export { Login } from './Login'
 export { ResetPassword } from './ResetPassword'
+export { CreateAccount } from './CreateAccount'
 export { Error404 } from './Error404'
