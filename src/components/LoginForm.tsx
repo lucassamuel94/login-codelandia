@@ -1,42 +1,22 @@
-import { useState } from 'react'
+import { useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { AuthContext } from '../context/AuthContext'
+
 import { Google } from '../assets/icons/Google'
 
-interface LoginFormProps {
-  onEmailLogin: (email: string, password: string) => void
-  onGoogleLogin: () => void
-}
-
-export const LoginForm: React.FC<LoginFormProps> = ({
-  onEmailLogin,
-  onGoogleLogin,
-}) => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-
-  const handleEmailLogin = (e: React.FormEvent) => {
-    e.preventDefault()
-    onEmailLogin(email, password)
-  }
-
-  const handleGoogleLogin = (e: React.FormEvent) => {
-    e.preventDefault()
-    onGoogleLogin()
-  }
+export const LoginForm: React.FC = () => {
+  const { email, password, setEmail, setPassword, loginWithEmail, loginWithGoogle } =
+    useContext(AuthContext)
 
   return (
-    <div className='flex-1 px-8 pt-20 flex items-center justify-center'>
-      <div className='flex flex-col max-w-[350px] w-full '>
-        <header className='font-title space-y-3'>
-          <span className='text-sm lg:text-base text-gray-700'>
-            Bem vindo de volta
-          </span>
-          <h1 className='text-2xl lg:text-[28px] font-bold'>
-            Faça login na sua conta
-          </h1>
+    <div className='pt-20 block mx-auto'>
+      <div className='flex flex-col'>
+        <header className='font-title space-y-2'>
+          <span className='text-sm lg:text-base text-gray-700'>Bem vindo de volta</span>
+          <h1 className='text-2xl lg:text-[28px] font-bold'>Faça login na sua conta</h1>
         </header>
 
-        <form className='mt-12' onSubmit={handleEmailLogin}>
+        <form className='mt-12' onSubmit={(event) => loginWithEmail(email, password, event)}>
           <div className='flex flex-col gap-2'>
             <label htmlFor='email' className='text-sm text-gray-500'>
               E-mail
@@ -74,11 +54,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                 id='remember'
                 className='rounded-full bg-gray-100 border-gray-200 text-blue-500 cursor-pointer focus:ring-blue-500'
               />
-              <label
-                htmlFor='remember'
-                className='cursor-pointer text-sm text-gray-700'
-              >
-                Lembre de mim{' '}
+              <label htmlFor='remember' className='cursor-pointer text-sm text-gray-700'>
+                Lembre de mim
               </label>
             </div>
 
@@ -97,7 +74,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
         <button
           className='font-bold text-white bg-gray-900 hover:bg-gray-800 transition-all flex items-center justify-center h-12 rounded-md w-full mt-4 gap-3'
-          onClick={handleGoogleLogin}
+          onClick={loginWithGoogle}
         >
           <Google />
           <span>Ou faça login com o Google</span>

@@ -1,18 +1,42 @@
-import { createContext, useEffect } from 'react'
+import { Dispatch, FormEvent, SetStateAction, createContext, useEffect } from 'react'
 import { useAuth } from '../hooks/useAuth'
 
 interface AuthProps {
   user: any
+  email: string
+  password: string
+  successMessage: string
+  errorMessage: string
+  setEmail: Dispatch<SetStateAction<string>>
+  setPassword: Dispatch<SetStateAction<string>>
+  setSuccessMessage: Dispatch<SetStateAction<string>>
+  setErrorMessage: Dispatch<SetStateAction<string>>
   isLogged: boolean
-  loginWithEmail: (email: string, password: string) => Promise<void>
-  loginWithGoogle: () => Promise<void>
+  loginWithEmail: (email: string, password: string, event: FormEvent) => Promise<void>
+  loginWithGoogle: (event: FormEvent) => Promise<void>
   logOut: () => void
+  handleResetPassword: (event: FormEvent) => Promise<void>
 }
 
 export const AuthContext = createContext({} as AuthProps)
 
 export const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const { user, setUser, loginWithEmail, loginWithGoogle, logOut } = useAuth()
+  const {
+    user,
+    email,
+    password,
+    successMessage,
+    errorMessage,
+    setUser,
+    setEmail,
+    setPassword,
+    setSuccessMessage,
+    setErrorMessage,
+    loginWithEmail,
+    loginWithGoogle,
+    logOut,
+    handleResetPassword,
+  } = useAuth()
 
   useEffect(() => {
     const loadStorageData = () => {
@@ -27,7 +51,22 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
 
   return (
     <AuthContext.Provider
-      value={{ user, isLogged: !!user, loginWithEmail, loginWithGoogle, logOut }}
+      value={{
+        user,
+        email,
+        password,
+        successMessage,
+        errorMessage,
+        setEmail,
+        setPassword,
+        setSuccessMessage,
+        setErrorMessage,
+        isLogged: !!user,
+        loginWithEmail,
+        loginWithGoogle,
+        logOut,
+        handleResetPassword,
+      }}
     >
       {children}
     </AuthContext.Provider>

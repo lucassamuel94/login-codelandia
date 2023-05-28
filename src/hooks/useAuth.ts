@@ -5,12 +5,19 @@ import {
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   signInWithPopup,
+  sendPasswordResetEmail,
 } from 'firebase/auth'
 
 export const useAuth = () => {
   const [user, setUser] = useState<any>(null)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
 
-  const loginWithEmail = async (email: string, password: string) => {
+  const loginWithEmail = async (email: string, password: string, event: React.FormEvent) => {
+    event.preventDefault()
+
     try {
       const userCredential: UserCredential = await signInWithEmailAndPassword(auth, email, password)
       const userToken = await userCredential.user.getIdToken()
@@ -24,7 +31,9 @@ export const useAuth = () => {
     }
   }
 
-  const loginWithGoogle = async () => {
+  const loginWithGoogle = async (event: React.FormEvent) => {
+    event.preventDefault()
+
     try {
       const provider = new GoogleAuthProvider()
       const userCredential = await signInWithPopup(auth, provider)
@@ -45,11 +54,36 @@ export const useAuth = () => {
     setUser(null)
   }
 
+  const handleResetPassword = async (event: React.FormEvent) => {
+    event.preventDefault()
+
+    try {
+      await sendPasswordResetEmail(auth, email)
+      setSuccessMessage('Um email de redefinição de senha foi enviado para o endereço fornecido.')
+      setErrorMessage('')
+    } catch (error) {
+      setSuccessMessage('')
+      setErrorMessage(
+        'Erro ao solicitar a redefinição de senha. Verifique o endereço de email fornecido.'
+      )
+      console.error('Erro ao solicitar a redefinição de senha:', error)
+    }
+  }
+
   return {
     user,
+    email,
+    password,
+    successMessage,
+    errorMessage,
     setUser,
+    setEmail,
+    setPassword,
+    setSuccessMessage,
+    setErrorMessage,
     loginWithEmail,
     loginWithGoogle,
     logOut,
+    handleResetPassword,
   }
 }
