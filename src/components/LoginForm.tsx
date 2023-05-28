@@ -1,12 +1,26 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { AuthContext } from '../context/AuthContext'
 
 import { Google } from '../assets/icons/Google'
 
 export const LoginForm: React.FC = () => {
-  const { email, password, setEmail, setPassword, loginWithEmail, loginWithGoogle } =
-    useContext(AuthContext)
+  const {
+    email,
+    password,
+    setEmail,
+    setPassword,
+    setSuccessMessage,
+    setErrorMessage,
+    loginWithEmail,
+    loginWithGoogle,
+  } = useContext(AuthContext)
+
+  useEffect(() => {
+    setPassword('')
+    setSuccessMessage('')
+    setErrorMessage('')
+  }, [setEmail, setErrorMessage, setPassword, setSuccessMessage])
 
   return (
     <div className='pt-20 block mx-auto'>
@@ -28,6 +42,7 @@ export const LoginForm: React.FC = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className='form-input p-3 border border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500'
+              autoFocus={true}
               required
             />
           </div>
