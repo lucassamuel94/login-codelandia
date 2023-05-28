@@ -6,12 +6,13 @@ interface AuthProps {
   isLogged: boolean
   loginWithEmail: (email: string, password: string) => Promise<void>
   loginWithGoogle: () => Promise<void>
+  logOut: () => void
 }
 
 export const AuthContext = createContext({} as AuthProps)
 
 export const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const { user, setUser, loginWithEmail, loginWithGoogle } = useAuth()
+  const { user, setUser, loginWithEmail, loginWithGoogle, logOut } = useAuth()
 
   useEffect(() => {
     const loadStorageData = () => {
@@ -25,7 +26,9 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
   }, [user, setUser])
 
   return (
-    <AuthContext.Provider value={{ user, isLogged: !!user, loginWithEmail, loginWithGoogle }}>
+    <AuthContext.Provider
+      value={{ user, isLogged: !!user, loginWithEmail, loginWithGoogle, logOut }}
+    >
       {children}
     </AuthContext.Provider>
   )

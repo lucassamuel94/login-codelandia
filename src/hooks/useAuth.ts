@@ -40,10 +40,16 @@ export const useAuth = () => {
     }
   }
 
+  const logOut = () => {
+    sessionStorage.clear()
+    setUser(null)
+  }
+
   return {
     user,
     setUser,
     loginWithEmail,
     loginWithGoogle,
+    logOut,
   }
 }
