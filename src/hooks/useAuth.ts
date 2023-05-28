@@ -6,6 +6,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   sendPasswordResetEmail,
+  createUserWithEmailAndPassword,
 } from 'firebase/auth'
 
 export const useAuth = () => {
@@ -70,6 +71,20 @@ export const useAuth = () => {
     }
   }
 
+  const handleCreateAccount = async (event: React.FormEvent) => {
+    event.preventDefault()
+
+    try {
+      await createUserWithEmailAndPassword(auth, email, password)
+      setSuccessMessage('Usuário criado com sucesso!')
+      setErrorMessage('')
+    } catch (error) {
+      setSuccessMessage('')
+      setErrorMessage('Erro ao criar usuário. Verifique os dados fornecidos.')
+      console.error('Erro ao criar usuário:', error)
+    }
+  }
+
   return {
     user,
     email,
@@ -85,5 +100,6 @@ export const useAuth = () => {
     loginWithGoogle,
     logOut,
     handleResetPassword,
+    handleCreateAccount,
   }
 }

@@ -16,6 +16,7 @@ interface AuthProps {
   loginWithGoogle: (event: FormEvent) => Promise<void>
   logOut: () => void
   handleResetPassword: (event: FormEvent) => Promise<void>
+  handleCreateAccount: (event: FormEvent) => Promise<void>
 }
 
 export const AuthContext = createContext({} as AuthProps)
@@ -36,6 +37,7 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
     loginWithGoogle,
     logOut,
     handleResetPassword,
+    handleCreateAccount,
   } = useAuth()
 
   useEffect(() => {
@@ -66,6 +68,7 @@ export const AuthContextProvider = ({ children }: { children: React.ReactNode })
         loginWithGoogle,
         logOut,
         handleResetPassword,
+        handleCreateAccount,
       }}
     >
       {children}
